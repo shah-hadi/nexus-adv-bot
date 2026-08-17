@@ -1,5 +1,7 @@
 # Nexus ADV Bot
 
+[![CI](https://github.com/shah-hadi/nexus-adv-bot/actions/workflows/ci.yml/badge.svg)](https://github.com/shah-hadi/nexus-adv-bot/actions/workflows/ci.yml)
+
 A modular Discord administration bot built for fast moderation, voice-channel control, role management, and everyday server utilities.
 
 ## Highlights
@@ -57,6 +59,11 @@ main.py               Bot startup and extension loading
 ## Security
 
 Never commit `.env`, `config.json`, or a Discord bot token. If a token is exposed, reset it immediately in the Discord Developer Portal.
+
+## Project documentation
+
+- [Contributing guide](CONTRIBUTING.md) — local setup, validation, and pull-request expectations
+- [Security policy](SECURITY.md) — private reporting and safe bot operation
 
 ## License
 
