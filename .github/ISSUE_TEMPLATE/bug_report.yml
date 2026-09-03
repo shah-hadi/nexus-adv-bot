@@ -1,0 +1,62 @@
+name: Bug report
+description: Report a reproducible Kyro problem
+title: "[Bug]: "
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: Thanks for helping improve Kyro. Remove tokens, private IDs, and user data from everything you share.
+  - type: textarea
+    id: problem
+    attributes:
+      label: What happened?
+      description: Describe the actual behavior and what you expected instead.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Reproduction steps
+      placeholder: |
+        1. Run...
+        2. Select...
+        3. Observe...
+    validations:
+      required: true
+  - type: input
+    id: command
+    attributes:
+      label: Command or feature
+      placeholder: /config, !ban, voice controls...
+  - type: dropdown
+    id: invocation
+    attributes:
+      label: Command style
+      options:
+        - Slash command
+        - Prefix command
+        - Interactive component
+        - Startup or background task
+        - Not applicable
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Include Python, discord.py, and operating-system versions when relevant.
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Sanitized logs
+      render: shell
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Safety checks
+      options:
+        - label: I removed tokens, private server identifiers, and user data.
+          required: true
+        - label: I searched existing issues for the same problem.
+          required: true
+

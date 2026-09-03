@@ -1,0 +1,31 @@
+name: Feature request
+description: Propose an improvement to Kyro
+title: "[Feature]: "
+labels: [enhancement]
+body:
+  - type: textarea
+    id: workflow
+    attributes:
+      label: Workflow or problem
+      description: What server-management task should become easier or safer?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed experience
+      description: Describe the command, interaction, permission behavior, and expected result.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+  - type: checkboxes
+    id: scope
+    attributes:
+      label: Scope check
+      options:
+        - label: This request fits moderation, configuration, permissions, voice operations, or server utilities.
+          required: true
+

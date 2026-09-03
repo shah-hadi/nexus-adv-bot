@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Security vulnerability
+    url: https://github.com/shah-hadi/kyro/security/advisories/new
+    about: Report security issues privately. Never post tokens or private server data in a public issue.
