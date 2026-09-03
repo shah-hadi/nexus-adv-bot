@@ -1,6 +1,6 @@
-# Contributing to Nexus ADV Bot
+# Contributing to Kyro
 
-Thanks for helping improve Nexus ADV Bot.
+Thanks for helping improve Kyro.
 
 ## Development setup
 

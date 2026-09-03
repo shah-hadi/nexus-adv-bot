@@ -4,7 +4,7 @@ import re
 import discord
 from discord.ext import commands
 
-from utils.theme import DANGER, EMOJI, SUCCESS, WARNING
+from utils.theme import BRAND, DANGER, FAILURE_COLOR, SUCCESS, WARNING, emoji
 
 
 def permission_names(permissions):
@@ -17,24 +17,28 @@ class BaseCog(commands.Cog):
 
     async def reply(self, ctx, text, color, *, success: bool = False):
         if success or color == SUCCESS:
-            icon = EMOJI["check"]
+            icon = emoji("success")
         elif color == WARNING:
-            icon = EMOJI["warning"]
+            icon = emoji("warn")
         elif color == DANGER:
-            icon = EMOJI["wrong"]
+            icon = emoji("fail")
         else:
-            icon = EMOJI["arrow"]
+            icon = emoji("arrow")
 
         line = " ".join(str(text).split())
         options = {"mention_author": False}
         if not success and color in {DANGER, WARNING}:
             ctx.command_failed = True
+            ctx.command_log_error = line
             if ctx.interaction:
                 options["ephemeral"] = True
             else:
                 options["delete_after"] = 10
         return await ctx.reply(
-            embed=discord.Embed(description=f"{icon} {line}", color=color),
+            embed=discord.Embed(
+                description=f"{icon} {line}",
+                color=FAILURE_COLOR if color == DANGER else BRAND,
+            ),
             **options,
         )
 

@@ -10,7 +10,7 @@ from utils.cog import BaseCog
 from utils.converters import MemberLookup, UserLookup
 from utils.permissions import configured_role
 from utils.settings import set_no_prefix
-from utils.theme import BRAND, SUCCESS, WARNING
+from utils.theme import BRAND, SUCCESS, WARNING, emoji
 
 
 class General(BaseCog):
@@ -18,7 +18,7 @@ class General(BaseCog):
         reference = getattr(ctx.message, "reference", None)
         if not reference or not reference.message_id: return None
         return reference.resolved if isinstance(reference.resolved, discord.Message) else await ctx.channel.fetch_message(reference.message_id)
-    @commands.hybrid_command(aliases=["noprefixuser"], description="Manage no-prefix access.")
+    @commands.command(aliases=["noprefixuser"], hidden=True)
     @commands.is_owner()
     async def noprefix(self, ctx, user: UserLookup, action: str = "add"):
         if action.lower() not in {"add", "give", "remove", "delete"}: return await self.reply(ctx, "Use `add` or `remove`.", WARNING)
@@ -28,16 +28,18 @@ class General(BaseCog):
     @commands.hybrid_command(aliases=["av"], description="Show a profile avatar.")
     @configured_role("avatar")
     async def avatar(self, ctx, user: UserLookup | None = None):
-        user = user or ctx.author; embed = discord.Embed(title=f"{user.display_name}'s avatar", color=BRAND)
+        user = user or ctx.author; ctx.command_log_target = user
+        embed = discord.Embed(title=f"{emoji('avatar')} {user.display_name}'s avatar", color=BRAND)
         embed.set_image(url=user.display_avatar.url); await ctx.reply(embed=embed, mention_author=False)
 
     @commands.hybrid_command(description="Show a profile banner.")
     @configured_role("banner")
     async def banner(self, ctx, user: UserLookup | None = None):
         user = await self.bot.fetch_user((user or ctx.author).id)
+        ctx.command_log_target = user
         if not user.banner:
             return await self.reply(ctx, f"{user.mention} does not have a profile banner.", WARNING)
-        embed = discord.Embed(title=f"{user.display_name}'s banner", color=user.accent_color or BRAND)
+        embed = discord.Embed(title=f"{emoji('banner')} {user.display_name}'s banner", color=BRAND)
         embed.set_image(url=user.banner.url)
         await ctx.reply(embed=embed, mention_author=False)
 
@@ -52,14 +54,15 @@ class General(BaseCog):
 
     @commands.hybrid_command(aliases=["user"], description="Show member information.")
     async def userinfo(self, ctx, member: MemberLookup | None = None):
-        member = member or ctx.author; embed = discord.Embed(title="Member profile", color=BRAND); embed.set_thumbnail(url=member.display_avatar.url)
+        member = member or ctx.author; ctx.command_log_target = member
+        embed = discord.Embed(title=f"{emoji('info')} Member profile", color=BRAND); embed.set_thumbnail(url=member.display_avatar.url)
         embed.add_field(name="User", value=f"{member.mention}\n`{member.id}`"); embed.add_field(name="Joined", value=discord.utils.format_dt(member.joined_at, "R"))
         await ctx.reply(embed=embed, mention_author=False)
 
     @commands.hybrid_command(aliases=["server"], description="Show server information.")
     @commands.guild_only()
     async def serverinfo(self, ctx):
-        guild = ctx.guild; embed = discord.Embed(title=guild.name, color=BRAND)
+        guild = ctx.guild; embed = discord.Embed(title=f"{emoji('info')} {guild.name}", color=BRAND)
         if guild.icon: embed.set_thumbnail(url=guild.icon.url)
         embed.add_field(name="Members", value=str(guild.member_count)); embed.add_field(name="Channels", value=str(len(guild.channels)))
         await ctx.reply(embed=embed, mention_author=False)
@@ -68,7 +71,7 @@ class General(BaseCog):
     @configured_role("dumprole")
     async def dumprole(self, ctx, role: discord.Role):
         text = " ".join(member.mention for member in role.members) or "No members have this role."
-        embed = discord.Embed(title=f"{role.name} members", description=text[:4000], color=BRAND)
+        embed = discord.Embed(title=f"{emoji('folder')} {role.name} members", description=text[:4000], color=BRAND)
         await ctx.reply(embed=embed, mention_author=False, allowed_mentions=discord.AllowedMentions.none())
 
     @commands.hybrid_command(description="Copy a custom emoji into this server.")

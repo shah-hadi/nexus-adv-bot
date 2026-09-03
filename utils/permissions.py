@@ -1,13 +1,17 @@
 import discord
 from discord.ext import commands
 
-from utils.settings import command_allowed, load_config
+from utils.settings import command_allowed, guild_config
 
 
 async def has_full_access(ctx: commands.Context) -> bool:
-    if await ctx.bot.is_owner(ctx.author) or ctx.author.id == ctx.guild.owner_id:
+    if (
+        await ctx.bot.is_owner(ctx.author)
+        or ctx.author.id == ctx.guild.owner_id
+        or ctx.author.guild_permissions.administrator
+    ):
         return True
-    admin_id = int(load_config().get("admin_role_id", 0))
+    admin_id = int(guild_config(ctx.guild.id).get("admin_role_id", 0))
     return admin_id and any(role.id == admin_id for role in ctx.author.roles)
 
 

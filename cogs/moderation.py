@@ -61,6 +61,7 @@ class Moderation(BaseCog):
     async def unban(self, ctx, user_id: int, *, reason="No reason provided"):
         user = await self.bot.fetch_user(user_id)
         await ctx.guild.unban(user, reason=reason)
+        ctx.command_log_target = user
         await self.reply(ctx, self.with_reason(f"{user.mention} was unbanned.", reason), SUCCESS)
 
 

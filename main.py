@@ -12,6 +12,7 @@ from dotenv import load_dotenv
 
 from utils.logger import CommandLogger
 from utils.settings import prefixes
+from utils.theme import FAILURE_COLOR, emoji
 
 load_dotenv(ROOT / ".env")
 TOKEN = os.getenv("BOT_TOKEN")
@@ -39,14 +40,13 @@ class Bot(commands.Bot):
     async def on_command_error(self, ctx, error):
         if isinstance(error, commands.CommandNotFound):
             return
-        if ctx.cog is not None:
+        if ctx.cog is not None and ctx.cog.has_error_handler():
             return
-        await self.command_logger.log(ctx, "failed", error)
         detail = error.original if isinstance(error, commands.CommandInvokeError) else error
         detail_text = " ".join(str(detail).split())[:500]
         embed = discord.Embed(
-            description=f"❌ The command could not be completed: {detail_text}",
-            color=discord.Color.dark_red(),
+            description=f"{emoji('fail')} The command could not be completed: {detail_text}",
+            color=FAILURE_COLOR,
         )
         await ctx.reply(embed=embed, mention_author=False)
 
